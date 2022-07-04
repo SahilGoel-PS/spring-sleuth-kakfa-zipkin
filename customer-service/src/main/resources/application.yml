@@ -1,0 +1,40 @@
+enable:
+    static:
+        files:
+            load: true
+logging:
+    pattern:
+        level: '[%thread] %highlight(%-5level) ServiceName:${spring.application.name}
+            ServiceHostName:${hostname} ServiceHostIP:%X{HOST_IP} ServiceVersion:${spring.application.version}
+            Channel:%X{X-CHANNEL-ID} Session:%X{x-session-id} TraceId:%X{traceId}
+            SpanId:%X{spanId} Class:%logger{39} Method:%method Line:%line %clr(---){faint}
+            %msg%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}'
+management:
+    endpoints:
+        web:
+            exposure:
+                include: health,info,prometheus
+server:
+    port: 9081
+spring:
+    application:
+        name: customer-service
+        version: v1
+    jmx:
+        enabled: true
+    sleuth:
+        baggage:
+            correlation-fields: x-session-id,x-custom-header
+            remote-fields: x-session-id,x-custom-header
+            tag-fields: x-session-id
+        keys:
+            http:
+                headers: x-session-id
+    zipkin:
+        api-path: /20200101/observations/public-span?dataFormat=zipkin&dataFormatVersion=2&dataKey=LSCNKMC52ERRAXTACJI7SI2I3UQ7LGTQ
+        base-url: https://aaaadak53p2e6aaaaaaaaabad4.apm-agt.me-jeddah-1.oci.oraclecloud.com
+        enabled: true
+tracing:
+    zipkin:
+        sampler:
+            probability: 1
